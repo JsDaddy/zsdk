@@ -517,7 +517,8 @@ public class ZPrinter
 
                 @Override
                 public void discoveryFinished() {
-                    result.success("DiscoveryDone");
+                    Log.e("discoveryFinished","BT discovery finished");
+//                    result.success("DiscoveryDone");
                 }
 
                 @Override
@@ -547,7 +548,8 @@ public class ZPrinter
 
                 @Override
                 public void discoveryFinished() {
-                    result.success("DiscoveryDone");
+                    Log.e("wifiDiscoveryFinished","wifi discovery finished");
+//                    result.success("DiscoveryDone");
                 }
 
                 @Override
