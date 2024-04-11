@@ -51,6 +51,8 @@ class ZSDK {
   static const String _PRINT_CONFIGURATION_LABEL_OVER_TCP_IP =
       "printConfigurationLabelOverTCPIP";
   static const String _REBOOT_PRINTER_OVER_TCP_IP = "rebootPrinterOverTCPIP";
+  static const String _DISCOVER_PRINTERS = "discoverPrinters";
+  static const String _DISCOVER_PRINTER_ADDRESSES = "discoverPrinterAddresses";
 
   /// Properties
   static const String _filePath = "filePath";
@@ -137,6 +139,16 @@ class ZSDK {
         _port: port,
       }).timeout(
           timeout ??= const Duration(seconds: DEFAULT_CONNECTION_TIMEOUT),
+          onTimeout: () => _onTimeout(timeout: timeout));
+
+  Future discoveryPrinters({Duration? timeout}) => _channel
+      .invokeMethod(_DISCOVER_PRINTERS)
+      .timeout(timeout ??= const Duration(seconds: DEFAULT_CONNECTION_TIMEOUT),
+          onTimeout: () => _onTimeout(timeout: timeout));
+
+  Future discoveryPrinterAddresses({Duration? timeout}) => _channel
+      .invokeMethod(_DISCOVER_PRINTER_ADDRESSES)
+      .timeout(timeout ??= const Duration(seconds: DEFAULT_CONNECTION_TIMEOUT),
           onTimeout: () => _onTimeout(timeout: timeout));
 
   Future setPrinterSettingsOverTCPIP(
