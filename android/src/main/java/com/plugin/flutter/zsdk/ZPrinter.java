@@ -3,6 +3,7 @@ package com.plugin.flutter.zsdk;
 import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
+import android.app.Activity;
 
 import com.google.gson.Gson;
 import com.zebra.sdk.comm.Connection;
@@ -46,7 +47,7 @@ public class ZPrinter
     protected final Handler handler = new Handler();
     protected PrinterConf printerConf;
     private static ArrayList<DiscoveredPrinter> discoveredPrinters = new ArrayList<>();
-    private static List<String> discoveredPrinterAddresses = new ArrayList<>();
+    private List<String> discoveredPrinterAddresses = new ArrayList<>();
 
     public ZPrinter(Context context, MethodChannel channel, Result result, PrinterConf printerConf)
     {
@@ -495,7 +496,7 @@ public class ZPrinter
 
     public void discoverPrinters() {
         try {
-            Log.e("Starting bluetooth printer discovery");
+            Log.e("StartMsg","Starting bluetooth printer discovery");
             BluetoothDiscoverer.findPrinters(context, new DiscoveryHandler() {
                 @Override
                 public void foundPrinter(final DiscoveredPrinter discoveredPrinter) {
@@ -505,7 +506,7 @@ public class ZPrinter
                         public void run() {
                             HashMap<String, Object> arguments = new HashMap<>();
                             arguments.put("address", discoveredPrinter.address);
-                            Log.e("Found bluetooth printer", discoveredPrinter.address);
+                            Log.e("FoundPrinterMsg","Found bluetooth printer: " + discoveredPrinter.address);
                             discoveredPrinterAddresses.add("BT: " + discoveredPrinter.address);
                             arguments.put("name", discoveredPrinter.getDiscoveryDataMap().get("FRIENDLY_NAME"));
                             arguments.put("type", 1);
@@ -523,10 +524,10 @@ public class ZPrinter
                 public void discoveryError(String s) {
                     HashMap<String, Object> arguments = new HashMap<>();
                     arguments.put("error", s);
-                    handler.post(() -> result.error(s));
+                    handler.post(() -> result.error(ErrorCode.PRINTER_ERROR.name(),s, arguments));
                 }
             });
-            Log.e("Starting network printer discovery");
+            Log.e("StartWiFiMsg","Starting network printer discovery");
             NetworkDiscoverer.findPrinters(new DiscoveryHandler() {
                 @Override
                 public void foundPrinter(DiscoveredPrinter discoveredPrinter) {
@@ -535,7 +536,7 @@ public class ZPrinter
                         public void run() {
                             HashMap<String, Object> arguments = new HashMap<>();
                             arguments.put("address", discoveredPrinter.address);
-                            Log.e("Found network printer", discoveredPrinter.address);
+                            Log.e("FoundWiFiPrinterMsg", "Found network printer: " + discoveredPrinter.address);
                             discoveredPrinterAddresses.add("WiFi: " + discoveredPrinter.address);
                             arguments.put("name", discoveredPrinter.getDiscoveryDataMap().get("SYSTEM_NAME"));
                             arguments.put("type", 0);
@@ -553,7 +554,7 @@ public class ZPrinter
                 public void discoveryError(String s) {
                     HashMap<String, Object> arguments = new HashMap<>();
                     arguments.put("error", s);
-                    handler.post(() -> result.error(s));
+                    handler.post(() -> result.error(ErrorCode.PRINTER_ERROR.name(),s, arguments));
                 }
             });
         } catch (Exception e) {
@@ -561,8 +562,16 @@ public class ZPrinter
         }
     }
 
-    public static List<String> getDiscoveredPrinterAddresses() {
-        handler.post(() -> result.success(discoveredPrinterAddresses));
+    public List<String> getDiscoveredPrinterAddresses() {
+        new Thread(() -> {
+            try {
+                handler.post(() -> result.success(discoveredPrinterAddresses));
+            }
+            catch(Exception e)
+            {
+                onException(e, printer);
+            }
+        }).start();
         return discoveredPrinterAddresses;
     }
 
