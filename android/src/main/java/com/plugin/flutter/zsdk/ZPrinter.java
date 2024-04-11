@@ -571,7 +571,7 @@ public class ZPrinter
             }
             catch(Exception e)
             {
-                onException(e, printer);
+                onException(e, null);
             }
         }).start();
         return discoveredPrinterAddresses;
