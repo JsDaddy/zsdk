@@ -511,7 +511,7 @@ public class ZPrinter
 //                            discoveredPrinterAddresses.add("BT: " + discoveredPrinter.address);
 //                            arguments.put("name", discoveredPrinter.getDiscoveryDataMap().get("FRIENDLY_NAME"));
 //                            arguments.put("type", 1);
-                            handler.post(() -> result.success(discoveredPrinter.address));
+//                            handler.post(() -> result.success(discoveredPrinter.address));
                         }
                     });
                 }
@@ -530,8 +530,8 @@ public class ZPrinter
                     handler.post(() -> result.error(ErrorCode.PRINTER_ERROR.name(),s, arguments));
                 }
             });
-            Log.e("StartWiFiMsg","Starting network printer discovery");
-            NetworkDiscoverer.findPrinters(new DiscoveryHandler() {
+//            Log.e("StartWiFiMsg","Starting network printer discovery");
+           /* NetworkDiscoverer.findPrinters(new DiscoveryHandler() {
                 @Override
                 public void foundPrinter(DiscoveredPrinter discoveredPrinter) {
                     ((Activity) context).runOnUiThread(new Runnable() {
@@ -566,7 +566,7 @@ public class ZPrinter
             });
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     public List<String> getDiscoveredPrinterAddresses() {
