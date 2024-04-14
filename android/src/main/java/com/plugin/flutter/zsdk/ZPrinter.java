@@ -495,7 +495,8 @@ public class ZPrinter
     }
 
     public void discoverPrinters() {
-        try {
+        discoveredPrinterAddresses.add("test11121")
+       /* try {
             Log.e("StartMsg","Starting bluetooth printer discovery");
             BluetoothDiscoverer.findPrinters(context, new DiscoveryHandler() {
                 @Override
