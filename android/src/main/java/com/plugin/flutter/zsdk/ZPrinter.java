@@ -495,7 +495,7 @@ public class ZPrinter
     }
 
     public void discoverPrinters() {
-        discoveredPrinterAddresses.add("test11121")
+        discoveredPrinterAddresses.add("test11121");
        /* try {
             Log.e("StartMsg","Starting bluetooth printer discovery");
             BluetoothDiscoverer.findPrinters(context, new DiscoveryHandler() {
@@ -568,6 +568,7 @@ public class ZPrinter
     public List<String> getDiscoveredPrinterAddresses() {
         new Thread(() -> {
             try {
+                discoveredPrinterAddresses.add("test1212");
                 handler.post(() -> result.success(discoveredPrinterAddresses));
             }
             catch(Exception e)
