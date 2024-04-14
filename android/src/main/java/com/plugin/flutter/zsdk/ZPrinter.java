@@ -504,13 +504,14 @@ public class ZPrinter
                     ((Activity) context).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            HashMap<String, Object> arguments = new HashMap<>();
-                            arguments.put("address", discoveredPrinter.address);
+//                            HashMap<String, Object> arguments = new HashMap<>();
+//                            arguments.put("address", discoveredPrinter.address);
                             Log.e("FoundPrinterMsg","Found bluetooth printer: " + discoveredPrinter.address);
-                            discoveredPrinterAddresses.add("BT: " + discoveredPrinter.address);
-                            arguments.put("name", discoveredPrinter.getDiscoveryDataMap().get("FRIENDLY_NAME"));
-                            arguments.put("type", 1);
-                            handler.post(() -> result.success(new Gson().toJson(arguments)));
+                            discoveredPrinterAddresses.add(discoveredPrinter.address)
+//                            discoveredPrinterAddresses.add("BT: " + discoveredPrinter.address);
+//                            arguments.put("name", discoveredPrinter.getDiscoveryDataMap().get("FRIENDLY_NAME"));
+//                            arguments.put("type", 1);
+                            handler.post(() -> result.success(discoveredPrinter.address));
                         }
                     });
                 }
@@ -536,13 +537,15 @@ public class ZPrinter
                     ((Activity) context).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            HashMap<String, Object> arguments = new HashMap<>();
-                            arguments.put("address", discoveredPrinter.address);
+//                            HashMap<String, Object> arguments = new HashMap<>();
+//                            arguments.put("address", discoveredPrinter.address);
                             Log.e("FoundWiFiPrinterMsg", "Found network printer: " + discoveredPrinter.address);
-                            discoveredPrinterAddresses.add("WiFi: " + discoveredPrinter.address);
-                            arguments.put("name", discoveredPrinter.getDiscoveryDataMap().get("SYSTEM_NAME"));
-                            arguments.put("type", 0);
-                            handler.post(() -> result.success(new Gson().toJson(arguments)));
+                            discoveredPrinterAddresses.add(discoveredPrinter.address)
+//                            discoveredPrinterAddresses.add("WiFi: " + discoveredPrinter.address);
+//                            arguments.put("name", discoveredPrinter.getDiscoveryDataMap().get("SYSTEM_NAME"));
+//                            arguments.put("type", 0);
+//                            handler.post(() -> result.success(new Gson().toJson(arguments)));
+                            handler.post(() -> result.success(discoveredPrinter.address));
                         }
                     });
                 }
