@@ -499,11 +499,8 @@ public class ZPrinter
             Log.e("StartMsg","Starting bluetooth printer discovery");
             BluetoothDiscoverer.findPrinters(context, new DiscoveryHandler() {
                 @Override
-                public void foundPrinter(final DiscoveredPrinter discoveredPrinter) {
+                public void foundPrinter(DiscoveredPrinter discoveredPrinter) {
                     discoveredPrinters.add(discoveredPrinter);
-                    ((Activity) context).runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
 //                            HashMap<String, Object> arguments = new HashMap<>();
 //                            arguments.put("address", discoveredPrinter.address);
                             Log.e("FoundPrinterMsg","Found bluetooth printer: " + discoveredPrinter.address);
@@ -512,8 +509,6 @@ public class ZPrinter
 //                            arguments.put("name", discoveredPrinter.getDiscoveryDataMap().get("FRIENDLY_NAME"));
 //                            arguments.put("type", 1);
 //                            handler.post(() -> result.success(discoveredPrinter.address));
-                        }
-                    });
                 }
 
                 @Override
@@ -531,7 +526,7 @@ public class ZPrinter
                 }
             });
 //            Log.e("StartWiFiMsg","Starting network printer discovery");
-           /* NetworkDiscoverer.findPrinters(new DiscoveryHandler() {
+        /*   NetworkDiscoverer.findPrinters(new DiscoveryHandler() {
                 @Override
                 public void foundPrinter(DiscoveredPrinter discoveredPrinter) {
                     ((Activity) context).runOnUiThread(new Runnable() {
