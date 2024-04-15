@@ -496,7 +496,7 @@ public class ZPrinter
 
     public void discoverPrinters() {
         discoveredPrinterAddresses.add("test11121");
-       /* try {
+       try {
             Log.e("StartMsg","Starting bluetooth printer discovery");
             BluetoothDiscoverer.findPrinters(context, new DiscoveryHandler() {
                 @Override
@@ -505,7 +505,7 @@ public class ZPrinter
 //                            HashMap<String, Object> arguments = new HashMap<>();
 //                            arguments.put("address", discoveredPrinter.address);
                             Log.e("FoundPrinterMsg","Found bluetooth printer: " + discoveredPrinter.address);
-                            discoveredPrinterAddresses.add(discoveredPrinter.address)
+                            discoveredPrinterAddresses.add(discoveredPrinter.address);
 //                            discoveredPrinterAddresses.add("BT: " + discoveredPrinter.address);
 //                            arguments.put("name", discoveredPrinter.getDiscoveryDataMap().get("FRIENDLY_NAME"));
 //                            arguments.put("type", 1);
