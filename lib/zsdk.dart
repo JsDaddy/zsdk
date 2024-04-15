@@ -142,12 +142,12 @@ class ZSDK {
           onTimeout: () => _onTimeout(timeout: timeout));
 
   Future discoveryPrinters({Duration? timeout}) => _channel
-      .invokeMethod(_DISCOVER_PRINTERS)
+      .invokeMethod(_DISCOVER_WIFI_PRINTERS)
       .timeout(timeout ??= const Duration(seconds: DEFAULT_CONNECTION_TIMEOUT),
           onTimeout: () => _onTimeout(timeout: timeout));
 
   Future discoveryPrinterAddresses({Duration? timeout}) => _channel
-      .invokeMethod(_DISCOVER_PRINTER_ADDRESSES)
+      .invokeMethod(_GET_DISCOVERED_WIFI_PRINTERS)
       .timeout(timeout ??= const Duration(seconds: DEFAULT_CONNECTION_TIMEOUT),
           onTimeout: () => _onTimeout(timeout: timeout));
 
