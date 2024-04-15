@@ -488,6 +488,7 @@ public class ZPrinter {
 
                     @Override
                     public void discoveryFinished() {
+                        Log.e("discovery", "BT discovery finished successfully");
                         handler.post(() -> result.success(btPrintersDetails));
                     }
 
@@ -523,6 +524,7 @@ public class ZPrinter {
 
                     @Override
                     public void discoveryFinished() {
+                        Log.e("discovery", "WiFi discovery finished successfully");
                         handler.post(() -> result.success(wifiPrintersDetails));
                     }
 
