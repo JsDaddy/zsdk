@@ -47,7 +47,7 @@ public class ZPrinter
     protected final Handler handler = new Handler();
     protected PrinterConf printerConf;
     private static ArrayList<DiscoveredPrinter> discoveredPrinters = new ArrayList<>();
-    private List<String> discoveredPrinterAddresses = new ArrayList<>();
+    private static List<String> discoveredPrinterAddresses = new ArrayList<>();
 
     public ZPrinter(Context context, MethodChannel channel, Result result, PrinterConf printerConf)
     {
@@ -495,7 +495,7 @@ public class ZPrinter
     }
 
     public void discoverPrinters() {
-        discoveredPrinterAddresses.add("test11121");
+        discoveredPrinterAddresses.add("1");
         try {
             Log.e("StartMsg","Starting bluetooth printer discovery");
             BluetoothDiscoverer.findPrinters(context, new DiscoveryHandler() {
@@ -554,10 +554,10 @@ public class ZPrinter
         }
     }
 
-    public List<String> getDiscoveredPrinterAddresses() {
+    public static List<String> getDiscoveredPrinterAddresses() {
         new Thread(() -> {
             try {
-                discoveredPrinterAddresses.add("test1212");
+                discoveredPrinterAddresses.add("2");
                 handler.post(() -> result.success(discoveredPrinterAddresses));
             }
             catch(Exception e)
