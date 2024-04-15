@@ -554,7 +554,7 @@ public class ZPrinter
         }
     }
 
-    public static List<String> getDiscoveredPrinterAddresses() {
+    public List<String> getDiscoveredPrinterAddresses() {
         new Thread(() -> {
             try {
                 discoveredPrinterAddresses.add("2");
