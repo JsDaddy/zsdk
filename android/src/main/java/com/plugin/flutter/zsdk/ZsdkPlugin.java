@@ -154,11 +154,17 @@ public class ZsdkPlugin implements FlutterPlugin, MethodCallHandler {
               call.argument(_port)
           );
           break;
-        case _DISCOVER_PRINTERS:
-          printer.discoverPrinters();
+        case _DISCOVER_BT_PRINTERS:
+          printer.discoverBtPrinters();
           break;
-        case _DISCOVER_PRINTER_ADDRESSES:
-          printer.getDiscoveredPrinterAddresses();
+        case _DISCOVER_WIFI_PRINTERS:
+          printer.discoverWiFiPrinters();
+          break;
+        case _GET_DISCOVERED_BT_PRINTERS:
+          printer.getDiscoveredBtPrinters();
+          break;
+        case _GET_DISCOVERED_WIFI_PRINTERS:
+          printer.getDiscoveredWiFiPrinters();
           break;
         case _PRINT_PDF_DATA_OVER_TCP_IP:
         default:

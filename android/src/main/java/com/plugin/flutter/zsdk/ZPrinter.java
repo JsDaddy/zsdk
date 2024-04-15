@@ -46,8 +46,10 @@ public class ZPrinter {
     protected Result result;
     protected final Handler handler = new Handler();
     protected PrinterConf printerConf;
-    private static ArrayList<DiscoveredPrinter> discoveredPrinters = new ArrayList<>();
-    private static List<String> discoveredPrinterAddresses = new ArrayList<>();
+    private static ArrayList<DiscoveredPrinter> discoveredBtPrinters = new ArrayList<>();
+    private static ArrayList<DiscoveredPrinter> discoveredWiFiPrinters = new ArrayList<>();
+    private static ArrayList<Map<String, Object>> btPrintersDetails = new ArrayList<>();
+    private static ArrayList<Map<String, Object>> wifiPrintersDetails = new ArrayList<>();
 
     public ZPrinter(Context context, MethodChannel channel, Result result, PrinterConf printerConf) {
         this.context = context;
@@ -468,46 +470,25 @@ public class ZPrinter {
         }).start();
     }
 
-    public void discoverPrinters() {
-        discoveredPrinters.clear();
+    public void discoverBtPrinters() {
+        discoveredBtPrinters.clear();
+        btPrintersDetails.clear();
         new Thread(() -> {
-            List<HashMap<String, Object>> printersList = new ArrayList<>();
             try {
                 BluetoothDiscoverer.findPrinters(context, new DiscoveryHandler() {
                     @Override
                     public void foundPrinter(DiscoveredPrinter discoveredPrinter) {
-                        discoveredPrinters.add(discoveredPrinter);
+                        discoveredBtPrinters.add(discoveredPrinter);
                         HashMap<String, Object> arguments = new HashMap<>();
                         arguments.put("address", discoveredPrinter.address);
                         arguments.put("name", discoveredPrinter.getDiscoveryDataMap().get("FRIENDLY_NAME"));
                         arguments.put("type", "Bluetooth");
-                        printersList.add(arguments);
+                        btPrintersDetails.add(arguments);
                     }
 
                     @Override
                     public void discoveryFinished() {
-                    }
-
-                    @Override
-                    public void discoveryError(String s) {
-                        HashMap<String, Object> arguments = new HashMap<>();
-                        arguments.put("error", s);
-                        handler.post(() -> result.error(ErrorCode.PRINTER_ERROR.name(), s, arguments));
-                    }
-                });
-                NetworkDiscoverer.findPrinters(new DiscoveryHandler() {
-                    @Override
-                    public void foundPrinter(DiscoveredPrinter discoveredPrinter) {
-                        discoveredPrinters.add(discoveredPrinter);
-                        HashMap<String, Object> arguments = new HashMap<>();
-                        arguments.put("address", discoveredPrinter.address);
-                        arguments.put("name", discoveredPrinter.getDiscoveryDataMap().get("SYSTEM_NAME"));
-                        arguments.put("type", "WiFi");
-                        printersList.add(arguments);
-                    }
-
-                    @Override
-                    public void discoveryFinished() {
+                        handler.post(() -> result.success(btPrintersDetails));
                     }
 
                     @Override
@@ -520,14 +501,58 @@ public class ZPrinter {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            handler.post(() -> result.success(printersList));
         }).start();
     }
 
-    public void getDiscoveredPrinterAddresses() {
+    public void discoverWiFiPrinters() {
+        discoveredWiFiPrinters.clear();
+        wifiPrintersDetails.clear();
+        new Thread(() -> {
+            List<HashMap<String, Object>> printersList = new ArrayList<>();
+            try {
+                NetworkDiscoverer.findPrinters(new DiscoveryHandler() {
+                    @Override
+                    public void foundPrinter(DiscoveredPrinter discoveredPrinter) {
+                        discoveredWiFiPrinters.add(discoveredPrinter);
+                        HashMap<String, Object> arguments = new HashMap<>();
+                        arguments.put("address", discoveredPrinter.address);
+                        arguments.put("name", discoveredPrinter.getDiscoveryDataMap().get("SYSTEM_NAME"));
+                        arguments.put("type", "WiFi");
+                        wifiPrintersDetails.add(arguments);
+                    }
+
+                    @Override
+                    public void discoveryFinished() {
+                        handler.post(() -> result.success(wifiPrintersDetails));
+                    }
+
+                    @Override
+                    public void discoveryError(String s) {
+                        HashMap<String, Object> arguments = new HashMap<>();
+                        arguments.put("error", s);
+                        handler.post(() -> result.error(ErrorCode.PRINTER_ERROR.name(), s, arguments));
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    public void getDiscoveredBtPrinters() {
         new Thread(() -> {
             try {
-                handler.post(() -> result.success(discoveredPrinters));
+                handler.post(() -> result.success(discoveredBtPrinters));
+            } catch (Exception e) {
+                onException(e, null);
+            }
+        }).start();
+    }
+
+    public void getDiscoveredWiFiPrinters() {
+        new Thread(() -> {
+            try {
+                handler.post(() -> result.success(discoveredWiFiPrinters));
             } catch (Exception e) {
                 onException(e, null);
             }
