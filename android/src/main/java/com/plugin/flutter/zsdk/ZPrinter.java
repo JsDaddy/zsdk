@@ -526,24 +526,13 @@ public class ZPrinter
                     handler.post(() -> result.error(ErrorCode.PRINTER_ERROR.name(),s, arguments));
                 }
             });
-//            Log.e("StartWiFiMsg","Starting network printer discovery");
-        /*   NetworkDiscoverer.findPrinters(new DiscoveryHandler() {
+            Log.e("StartWiFiMsg","Starting network printer discovery");
+           NetworkDiscoverer.findPrinters(new DiscoveryHandler() {
                 @Override
                 public void foundPrinter(DiscoveredPrinter discoveredPrinter) {
-                    ((Activity) context).runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-//                            HashMap<String, Object> arguments = new HashMap<>();
-//                            arguments.put("address", discoveredPrinter.address);
+                    discoveredPrinters.add(discoveredPrinter);
                             Log.e("FoundWiFiPrinterMsg", "Found network printer: " + discoveredPrinter.address);
                             discoveredPrinterAddresses.add(discoveredPrinter.address)
-//                            discoveredPrinterAddresses.add("WiFi: " + discoveredPrinter.address);
-//                            arguments.put("name", discoveredPrinter.getDiscoveryDataMap().get("SYSTEM_NAME"));
-//                            arguments.put("type", 0);
-//                            handler.post(() -> result.success(new Gson().toJson(arguments)));
-                            handler.post(() -> result.success(discoveredPrinter.address));
-                        }
-                    });
                 }
 
                 @Override
@@ -559,7 +548,7 @@ public class ZPrinter
                     arguments.put("error", s);
                     handler.post(() -> result.error(ErrorCode.PRINTER_ERROR.name(),s, arguments));
                 }
-            });*/
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
