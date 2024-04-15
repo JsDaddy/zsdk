@@ -53,8 +53,10 @@ public class ZsdkPlugin implements FlutterPlugin, MethodCallHandler {
   static final String _DO_MANUAL_CALIBRATION_OVER_TCP_IP = "doManualCalibrationOverTCPIP";
   static final String _PRINT_CONFIGURATION_LABEL_OVER_TCP_IP = "printConfigurationLabelOverTCPIP";
   static final String _REBOOT_PRINTER_OVER_TCP_IP = "rebootPrinterOverTCPIP";
-  static final String _DISCOVER_PRINTERS = "discoverPrinters";
-  static final String _DISCOVER_PRINTER_ADDRESSES = "discoverPrinterAddresses";
+  static final String _DISCOVER_BT_PRINTERS = "discoverBtPrinters";
+  static final String _DISCOVER_WIFI_PRINTERS = "discoverWiFiPrinters";
+  static final String _GET_DISCOVERED_BT_PRINTERS = "getDiscoveredBtPrinters";
+  static final String _GET_DISCOVERED_WIFI_PRINTERS = "getDiscoveredWiFiPrinters";
 
   /** Properties */
   static final String _filePath = "filePath";
