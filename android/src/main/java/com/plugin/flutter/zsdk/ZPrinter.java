@@ -532,7 +532,7 @@ public class ZPrinter
                 public void foundPrinter(DiscoveredPrinter discoveredPrinter) {
                     discoveredPrinters.add(discoveredPrinter);
                             Log.e("FoundWiFiPrinterMsg", "Found network printer: " + discoveredPrinter.address);
-                            discoveredPrinterAddresses.add(discoveredPrinter.address)
+                            discoveredPrinterAddresses.add(discoveredPrinter.address);
                 }
 
                 @Override
