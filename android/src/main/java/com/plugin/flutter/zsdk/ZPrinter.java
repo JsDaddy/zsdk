@@ -532,6 +532,7 @@ public class ZPrinter {
                     @Override
                     public void discoveryError(String s) {
                         HashMap<String, Object> arguments = new HashMap<>();
+                        Log.e("error", "Discovery error");
                         arguments.put("error", s);
                         handler.post(() -> result.error(ErrorCode.PRINTER_ERROR.name(), s, arguments));
                     }
