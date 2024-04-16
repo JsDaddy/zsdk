@@ -51,10 +51,9 @@ class ZSDK {
   static const String _PRINT_CONFIGURATION_LABEL_OVER_TCP_IP =
       "printConfigurationLabelOverTCPIP";
   static const String _REBOOT_PRINTER_OVER_TCP_IP = "rebootPrinterOverTCPIP";
-  static const String _DISCOVER_BT_PRINTERS = "discoverBtPrinters";
   static const String _DISCOVER_WIFI_PRINTERS = "discoverWiFiPrinters";
-  static const String _GET_DISCOVERED_WIFI_PRINTERS = "getDiscoveredWiFiPrinters";
-  static const String _GET_DISCOVERED_BT_PRINTERS = "getDiscoveredBtPrinters";
+  static const String _GET_DISCOVERED_WIFI_PRINTERS =
+      "getDiscoveredWiFiPrinters";
 
   /// Properties
   static const String _filePath = "filePath";
