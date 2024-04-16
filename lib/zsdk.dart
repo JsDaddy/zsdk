@@ -8,6 +8,7 @@ import 'package:zsdk/src/printer_conf.dart';
 import 'package:zsdk/src/printer_response.dart';
 import 'package:zsdk/src/printer_settings.dart';
 import 'package:zsdk/src/status_info.dart';
+import 'package:zsdk/src/wifi-printer.model.dart';
 
 export 'package:zsdk/src/enumerators/cause.dart';
 export 'package:zsdk/src/enumerators/error_code.dart';
@@ -25,6 +26,7 @@ export 'package:zsdk/src/enumerators/virtual_device.dart';
 export 'package:zsdk/src/enumerators/status.dart';
 export 'package:zsdk/src/status_info.dart';
 export 'package:zsdk/src/enumerators/zpl_mode.dart';
+export 'package:zsdk/src/wifi-printer.model.dart';
 
 class ZSDK {
   static const int DEFAULT_ZPL_TCP_PORT = 9100;
@@ -142,9 +144,17 @@ class ZSDK {
           timeout ??= const Duration(seconds: DEFAULT_CONNECTION_TIMEOUT),
           onTimeout: () => _onTimeout(timeout: timeout));
 
-  Future discoveryPrinters({Duration? timeout}) => _channel
-      .invokeMethod(_DISCOVER_WIFI_PRINTERS)
-      .timeout(timeout ??= const Duration(seconds: DEFAULT_CONNECTION_TIMEOUT),
+  Future<List<WifiPrinterModel>> discoveryPrinters({Duration? timeout}) =>
+      _channel.invokeMethod(_DISCOVER_WIFI_PRINTERS).then((value) {
+        if (value is List) {
+          return value.map<WifiPrinterModel>((e) {
+            Map<String, dynamic> printerMap = Map<String, dynamic>.from(e);
+            return WifiPrinterModel.fromJson(printerMap);
+          }).toList();
+        }
+        return <WifiPrinterModel>[];
+      }).timeout(
+          timeout ??= const Duration(seconds: DEFAULT_CONNECTION_TIMEOUT),
           onTimeout: () => _onTimeout(timeout: timeout));
 
   Future discoveryPrinterAddresses({Duration? timeout}) => _channel
