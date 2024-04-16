@@ -518,7 +518,7 @@ public class ZPrinter {
                         HashMap<String, Object> arguments = new HashMap<>();
                         arguments.put("address", discoveredPrinter.address);
                         arguments.put("name", discoveredPrinter.getDiscoveryDataMap().get("SYSTEM_NAME"));
-                        arguments.put("port", discoveredPrinter.getDiscoveryDataMap().get("TLS_JSON_PORT_NUMBER"));
+                        arguments.put("port", discoveredPrinter.getDiscoveryDataMap().get("PORT_NUMBER"));
                         arguments.put("type", "WiFi");
                         wifiPrintersDetails.add(arguments);
                     }
