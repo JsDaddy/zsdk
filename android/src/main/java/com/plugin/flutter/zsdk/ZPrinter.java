@@ -526,8 +526,6 @@ public class ZPrinter {
                     @Override
                     public void discoveryFinished() {
                         Log.e("discovery", "WiFi discovery finished successfully");
-                        HashMap<String, Object> arguments = new HashMap<>();
-                        wifiPrintersDetails.add(arguments);
                         handler.post(() -> result.success(wifiPrintersDetails));
                     }
 
