@@ -8,4 +8,7 @@ class WifiPrinterModel {
   static WifiPrinterModel fromJson(Map<String, dynamic> json) =>
       WifiPrinterModel(json['address'] as String, json['name'] as String,
           int.tryParse(json['port']) ?? 0000);
+
+  Map<String, dynamic> toJson() =>
+      <String, dynamic>{'address': address, 'name': name, 'port': port};
 }
