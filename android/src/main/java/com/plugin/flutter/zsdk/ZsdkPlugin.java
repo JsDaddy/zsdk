@@ -47,6 +47,7 @@ public class ZsdkPlugin implements FlutterPlugin, MethodCallHandler {
   static final String _PRINT_PDF_DATA_OVER_TCP_IP = "printPdfDataOverTCPIP";
   static final String _PRINT_ZPL_FILE_OVER_TCP_IP = "printZplFileOverTCPIP";
   static final String _PRINT_ZPL_DATA_OVER_TCP_IP = "printZplDataOverTCPIP";
+  static final String _PRINT_ZPL_DATA_OVER_BT = "printZplDataOverBT";
   static final String _CHECK_PRINTER_STATUS_OVER_TCP_IP = "checkPrinterStatusOverTCPIP";
   static final String _GET_PRINTER_SETTINGS_OVER_TCP_IP = "getPrinterSettingsOverTCPIP";
   static final String _SET_PRINTER_SETTINGS_OVER_TCP_IP = "setPrinterSettingsOverTCPIP";
@@ -141,6 +142,12 @@ public class ZsdkPlugin implements FlutterPlugin, MethodCallHandler {
               call.argument(_filePath),
               call.argument(_address),
               call.argument(_port)
+          );
+          break;
+        case _PRINT_ZPL_DATA_OVER_BT:
+          printer.printZplDataOverBT(
+              call.argument(_data),
+              call.argument(_address)
           );
           break;
         case _PRINT_ZPL_DATA_OVER_TCP_IP:

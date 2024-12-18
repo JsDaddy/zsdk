@@ -20,6 +20,7 @@ import com.zebra.sdk.printer.discovery.DiscoveredPrinter;
 import com.zebra.sdk.printer.discovery.DiscoveryHandler;
 import com.zebra.sdk.printer.discovery.NetworkDiscoverer;
 import com.zebra.sdk.util.internal.FileUtilities;
+import com.zebra.sdk.comm.BluetoothConnection;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -335,6 +336,59 @@ public class ZPrinter {
             int tcpPort = port != null ? port : TcpConnection.DEFAULT_ZPL_TCP_PORT;
 
             connection = newConnection(address, tcpPort);
+            connection.open();
+
+            try {
+                printer = ZebraPrinterFactory.getInstance(connection);
+                if (isReadyToPrint(printer)) {
+                    init(connection);
+                    if (isZPL) {
+                        changePrinterLanguage(connection, SGDParams.VALUE_ZPL_LANGUAGE);
+                    } else {
+                        // If enablePDFDirect was required, then abort printing as the Printer will be rebooted and the connection will be closed.
+                        if (enablePDFDirect(connection, true)) {
+                            onPrinterRebooted("Printer was rebooted to be able to use PDF Direct feature.");
+                            return;
+                        }
+                    }
+//                    connection.write(data.getBytes()); //This would be to send zpl as a string, this fails if the string is too big
+//                    printer.sendFileContents(filePath); //This would be to send zpl as a file path
+                    FileUtilities.sendFileContentsInChunks(connection, dataStream); //This is the recommended way.
+                    PrinterResponse response = new PrinterResponse(ErrorCode.SUCCESS,
+                            getStatusInfo(printer), "Successful print");
+                    handler.post(() -> result.success(response.toMap()));
+                } else {
+                    PrinterResponse response = new PrinterResponse(ErrorCode.PRINTER_ERROR,
+                            getStatusInfo(printer), "Printer is not ready");
+                    handler.post(() -> result.error(ErrorCode.PRINTER_ERROR.name(),
+                            response.message, response.toMap()));
+                }
+
+            } finally {
+                connection.close();
+            }
+        } catch (ConnectionException e) {
+            onConnectionTimeOut(e);
+        } catch (Exception e) {
+            onException(e, printer);
+        }
+    }
+
+    public void printZplDataOverBT(final String data, final String address) {
+        if (data == null || data.isEmpty())
+            throw new NullPointerException("ZPL data can not be empty");
+        new Thread(() -> doPrintDataStreamOverBT(
+                new ByteArrayInputStream(data.getBytes(Charset.forName("UTF-8"))), address, true))
+                .start();
+    }
+
+    private void doPrintDataStreamOverBT(final InputStream dataStream, final String address, boolean isZPL) {
+        Connection connection;
+        ZebraPrinter printer = null;
+        try {
+            if (dataStream == null) throw new NullPointerException("Data stream can not be empty");
+
+            connection = new BluetoothConnection(address);
             connection.open();
 
             try {

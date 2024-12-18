@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/services.dart';
+import 'package:zsdk/src/bt-printer.model.dart';
 import 'package:zsdk/src/enumerators/cause.dart';
 import 'package:zsdk/src/enumerators/error_code.dart';
 import 'package:zsdk/src/enumerators/orientation.dart';
@@ -27,6 +28,7 @@ export 'package:zsdk/src/enumerators/status.dart';
 export 'package:zsdk/src/status_info.dart';
 export 'package:zsdk/src/enumerators/zpl_mode.dart';
 export 'package:zsdk/src/wifi-printer.model.dart';
+export 'package:zsdk/src/bt-printer.model.dart';
 
 class ZSDK {
   static const int DEFAULT_ZPL_TCP_PORT = 9100;
@@ -42,6 +44,7 @@ class ZSDK {
   static const String _PRINT_PDF_DATA_OVER_TCP_IP = "printPdfDataOverTCPIP";
   static const String _PRINT_ZPL_FILE_OVER_TCP_IP = "printZplFileOverTCPIP";
   static const String _PRINT_ZPL_DATA_OVER_TCP_IP = "printZplDataOverTCPIP";
+  static const String _PRINT_ZPL_DATA_OVER_BT = "printZplDataOverBT";
   static const String _CHECK_PRINTER_STATUS_OVER_TCP_IP =
       "checkPrinterStatusOverTCPIP";
   static const String _GET_PRINTER_SETTINGS_OVER_TCP_IP =
@@ -54,6 +57,7 @@ class ZSDK {
       "printConfigurationLabelOverTCPIP";
   static const String _REBOOT_PRINTER_OVER_TCP_IP = "rebootPrinterOverTCPIP";
   static const String _DISCOVER_WIFI_PRINTERS = "discoverWiFiPrinters";
+  static const String _DISCOVER_BT_PRINTERS = "discoverBtPrinters";
   static const String _GET_DISCOVERED_WIFI_PRINTERS =
       "getDiscoveredWiFiPrinters";
 
@@ -153,6 +157,19 @@ class ZSDK {
           }).toList();
         }
         return <WifiPrinterModel>[];
+      }).timeout(
+          timeout ??= const Duration(seconds: DEFAULT_CONNECTION_TIMEOUT),
+          onTimeout: () => _onTimeout(timeout: timeout));
+
+  Future<List<BtPrinterModel>> discoveryBtPrinters({Duration? timeout}) =>
+      _channel.invokeMethod(_DISCOVER_BT_PRINTERS).then((value) {
+        if (value is List) {
+          return value.map<BtPrinterModel>((e) {
+            Map<String, dynamic> printerMap = Map<String, dynamic>.from(e);
+            return BtPrinterModel.fromJson(printerMap);
+          }).toList();
+        }
+        return <BtPrinterModel>[];
       }).timeout(
           timeout ??= const Duration(seconds: DEFAULT_CONNECTION_TIMEOUT),
           onTimeout: () => _onTimeout(timeout: timeout));
@@ -260,6 +277,15 @@ class ZSDK {
           port: port,
           printerConf: printerConf,
           timeout: timeout);
+
+  Future printZplDataOverBT(
+          {required String data, required String address, Duration? timeout}) =>
+      _channel.invokeMethod(_PRINT_ZPL_DATA_OVER_BT, {
+        _data: data,
+        _address: address
+      }).timeout(
+          timeout ??= const Duration(seconds: DEFAULT_CONNECTION_TIMEOUT),
+          onTimeout: () => _onTimeout(timeout: timeout));
 
   Future _printDataOverTCPIP(
           {required method,
