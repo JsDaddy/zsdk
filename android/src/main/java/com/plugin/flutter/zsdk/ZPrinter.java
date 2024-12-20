@@ -536,6 +536,10 @@ public class ZPrinter {
                         Log.e("discovery", "found printer");
                         discoveredBtPrinters.add(discoveredPrinter);
                         HashMap<String, Object> arguments = new HashMap<>();
+                         for (String settingsKey : printer.getDiscoveryDataMap().keySet()) {
+                            Log.e("discovery", "Key" + settingsKey + " Value: " + printer.getDiscoveryDataMap().get(settingsKey));
+                        }
+ 
                         arguments.put("address", discoveredPrinter.address);
                         arguments.put("name", discoveredPrinter.getDiscoveryDataMap().get("FRIENDLY_NAME"));
                         arguments.put("type", "Bluetooth");
