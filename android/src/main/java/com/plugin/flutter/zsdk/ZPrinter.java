@@ -525,6 +525,7 @@ public class ZPrinter {
     }
 
     public void discoverBtPrinters() {
+        Log.e("discovery", "Discovery start");
         discoveredBtPrinters.clear();
         btPrintersDetails.clear();
         new Thread(() -> {
@@ -532,6 +533,7 @@ public class ZPrinter {
                 BluetoothDiscoverer.findPrinters(context, new DiscoveryHandler() {
                     @Override
                     public void foundPrinter(DiscoveredPrinter discoveredPrinter) {
+                        Log.e("discovery", "found printer");
                         discoveredBtPrinters.add(discoveredPrinter);
                         HashMap<String, Object> arguments = new HashMap<>();
                         arguments.put("address", discoveredPrinter.address);
@@ -542,18 +544,21 @@ public class ZPrinter {
 
                     @Override
                     public void discoveryFinished() {
+                        Log.e("discovery", "discoveryFinished");
                         Log.e("discovery", "BT discovery finished successfully");
                         handler.post(() -> result.success(btPrintersDetails));
                     }
 
                     @Override
                     public void discoveryError(String s) {
+                        Log.e("discovery", "discoveryError");
                         HashMap<String, Object> arguments = new HashMap<>();
                         arguments.put("error", s);
                         handler.post(() -> result.error(ErrorCode.PRINTER_ERROR.name(), s, arguments));
                     }
                 });
             } catch (Exception e) {
+                Log.e("discovery", "catch exception");
                 e.printStackTrace();
             }
         }).start();
