@@ -45,7 +45,7 @@ public class ZPrinter {
     protected Context context;
     protected MethodChannel channel;
     protected Result result;
-    protected final Handler handler = new Handler();
+    protected final Handler handler = new Handler(Looper.getMainLooper());
     protected PrinterConf printerConf;
     private static ArrayList<DiscoveredPrinter> discoveredBtPrinters = new ArrayList<>();
     private static ArrayList<DiscoveredPrinter> discoveredWiFiPrinters = new ArrayList<>();
