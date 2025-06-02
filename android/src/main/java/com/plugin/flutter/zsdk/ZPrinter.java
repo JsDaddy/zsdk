@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
 import android.app.Activity;
+import android.os.Looper;
+
 
 import com.google.gson.Gson;
 import com.zebra.sdk.comm.Connection;
